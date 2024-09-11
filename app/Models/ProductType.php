@@ -11,19 +11,10 @@ class ProductType extends Model
     protected $fillable = [
         "name",
         "description",
-        "category_id",
-        "image",
-        "price",
-        "product_type_id",
     ];
 
     public function products()
     {
         return $this->hasMany(Product::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 }

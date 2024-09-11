@@ -16,6 +16,7 @@ class Product extends Model
         "description",
         "price",
         "image",
+        "discount"
     ];
 
     public function category()
@@ -27,9 +28,23 @@ class Product extends Model
     {
         return $this->belongsTo(ProductType::class);
     }
-    
+
     public function sizes()
     {
         return $this->hasMany(ProductSize::class);
+    }
+
+    public function carts(): BelongsToMany
+    {
+        return $this->belongsToMany(Cart::class)
+            ->withPivot("quantity")
+            ->withTimestamps();
+    }
+    
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)
+            ->withPivot("quantity")
+            ->withTimestamps();
     }
 }

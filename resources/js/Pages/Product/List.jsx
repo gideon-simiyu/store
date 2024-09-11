@@ -21,6 +21,7 @@ export default function List({ auth, products, productTypes, categories }) {
     description: "",
     price: "",
     image: null,
+    discount: 0,
   });
 
   const submit = (e) => {
@@ -35,6 +36,7 @@ export default function List({ auth, products, productTypes, categories }) {
           "description",
           "price",
           "image",
+          "discount"
         );
         closeModal();
       },
@@ -59,7 +61,7 @@ export default function List({ auth, products, productTypes, categories }) {
     "product type",
     "description",
     "price",
-    "image",
+    "Discount (%)"
   ];
   const columns = [
     "name",
@@ -67,7 +69,7 @@ export default function List({ auth, products, productTypes, categories }) {
     "product_type.name",
     "description",
     "price",
-    "image",
+    "discount"
   ];
 
   return (
@@ -80,7 +82,7 @@ export default function List({ auth, products, productTypes, categories }) {
       }
     >
       <Head title="Products" />
-      <div className="bg-primary shadow-lg p-6">
+      <div className="bg-primary shadow-lg p-6 h-full">
         <div className="flex justify-between py-3">
           <h1 className="text-2xl">Products</h1>
           <button
@@ -93,7 +95,7 @@ export default function List({ auth, products, productTypes, categories }) {
         <hr />
 
         <div className="mt-4">
-          <DataTable headers={headers} columns={columns} data={products} />
+          <DataTable image="image" route="/product" actions view remove headers={headers} columns={columns} data={products} />
         </div>
       </div>
 

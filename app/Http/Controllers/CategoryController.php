@@ -13,6 +13,9 @@ class CategoryController extends Controller
 {
     public function store(Request $request)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
         $validatedData = $request->validate([
             "name" => "required|string|max:255",
             "description" => "nullable|string",
@@ -25,8 +28,12 @@ class CategoryController extends Controller
             ->with("success", "Category created successfully!");
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
+        $category = Category::find($request->id);
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
         $validatedData = $request->validate([
             "name" => "required|string|max:255",
             "description" => "nullable|string",
@@ -35,12 +42,16 @@ class CategoryController extends Controller
         $category->update($validatedData);
 
         return redirect()
-            ->route("categories")
+            ->route("categories.view", $category->id)
             ->with("success", "Category updated successfully!");
     }
 
-    public function destroy(Category $category)
+    public function destroy(Request $request)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
+        $category = Category::find($request->id);
         $category->delete();
 
         return redirect()
@@ -48,12 +59,24 @@ class CategoryController extends Controller
             ->with("success", "Category deleted successfully!");
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
+
         $categories = Category::all();
 
-        return Inertia::render("Product/Categories", [
+        return Inertia::render("Admin/Category/List", [
             "categories" => $categories,
+        ]);
+    }
+
+    public function view($id)
+    {
+        $category = Category::find($id);
+        return Inertia::render("Admin/Category/View", [
+            "category" => $category,
         ]);
     }
 }

@@ -15,10 +15,10 @@
         <!-- Scripts -->
         @routes
         @viteReactRefresh
-        @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
+        @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="font-poppins antialiased">
+    <body class="font-poppins antialiased relative bg-grey-200 text-grey-900 dark:text-grey-100 dark:bg-grey-900">
         @inertia
     </body>
 </html>

@@ -12,10 +12,6 @@ return new class extends Migration {
     {
         Schema::create("product_types", function (Blueprint $table) {
             $table->id();
-            $table
-                ->foreignId("category_id")
-                ->constrained()
-                ->onDelete("cascade");
             $table->string("name");
             $table->string("description");
             $table->timestamps();

@@ -16,10 +16,12 @@ class ProductTypeController extends Controller
 {
     public function store(Request $request)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
         $validatedData = $request->validate([
             "name" => "required|string|max:255",
-            "description" => "nullable|string",
-            "category_id" => "required|exists:categories,id",
+            "description" => "nullable|string"
         ]);
 
         ProductType::create($validatedData);
@@ -31,6 +33,9 @@ class ProductTypeController extends Controller
 
     public function update(Request $request, ProductType $productType)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
         $validatedData = $request->validate([
             "name" => "required|string|max:255",
             "description" => "nullable|string",
@@ -44,8 +49,11 @@ class ProductTypeController extends Controller
             ->with("success", "Product type updated successfully!");
     }
 
-    public function destroy(ProductType $productType)
+    public function destroy(Request $request, ProductType $productType)
     {
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
         $productType->delete();
 
         return redirect()
@@ -53,14 +61,15 @@ class ProductTypeController extends Controller
             ->with("success", "Product type deleted successfully!");
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
-        $productTypes = ProductType::with("category")->get();
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
+        $productTypes = ProductType::all();
 
         return Inertia::render("Product/Types", [
             "productTypes" => $productTypes,
-            "categories" => $categories,
         ]);
     }
 }

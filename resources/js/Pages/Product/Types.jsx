@@ -7,7 +7,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
-export default function Types({ auth, productTypes, categories }) {
+export default function Types({ auth, productTypes }) {
   console.log(productTypes);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,7 +15,6 @@ export default function Types({ auth, productTypes, categories }) {
   const closeModal = () => setIsModalOpen(false);
 
   const { data, setData, post, processing, errors, reset } = useForm({
-    category_id: "",
     name: "",
     description: "",
   });
@@ -25,18 +24,14 @@ export default function Types({ auth, productTypes, categories }) {
 
     post(route("product_types.create"), {
       onFinish: () => {
-        reset("category_id", "name", "description");
+        reset("name", "description");
         closeModal();
       },
     });
   };
 
-  useEffect(() => {
-    setData("category_id", categories[0].id);
-  }, [productTypes]);
-
-  const headers = ["category", "name", "description"];
-  const columns = ["category.name", "name", "description"];
+  const headers = ["name", "description", "Creates On"];
+  const columns = ["name", "description", "created_at"];
 
   return (
     <AuthenticatedLayout
@@ -60,7 +55,7 @@ export default function Types({ auth, productTypes, categories }) {
         </div>
         <hr />
         <div className="mt-4">
-          <DataTable headers={headers} columns={columns} data={productTypes} />
+          <DataTable headers={headers} columns={columns} data={productTypes} actions view />
         </div>
       </div>
       <Modal
@@ -77,22 +72,6 @@ export default function Types({ auth, productTypes, categories }) {
             <hr />
           </div>
           <form onSubmit={submit}>
-            <div className="mb-4">
-              <InputLabel htmlFor="category_id" value="Product Type Category" />
-              <FormSelect
-                name="category_id"
-                id="category_id"
-                className="mt-1"
-                onChange={(e) => setData("category_id", e.target.value)}
-              >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </FormSelect>
-            </div>
-
             <div className="mb-4">
               <InputLabel htmlFor="name" value="Product Type Name" />
               <TextInput
