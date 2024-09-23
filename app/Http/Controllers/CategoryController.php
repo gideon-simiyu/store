@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,7 @@ class CategoryController extends Controller
         if ($request->user()->is_staff != 1) {
             return Redirect::route("home");
         }
+
         $validatedData = $request->validate([
             "name" => "required|string|max:255",
             "description" => "nullable|string",
@@ -46,7 +48,7 @@ class CategoryController extends Controller
             ->with("success", "Category updated successfully!");
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id)
     {
         if ($request->user()->is_staff != 1) {
             return Redirect::route("home");

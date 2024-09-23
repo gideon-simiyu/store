@@ -113,7 +113,7 @@ export default function Register() {
               </label>
               <div className="relative">
                 <input
-                  type="email"
+                  type="password"
                   placeholder="Re-Enter your password"
                   value={data.password_confirmation}
                   onChange={(e) => setData("password_confirmation", e.target.value)}

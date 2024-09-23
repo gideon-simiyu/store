@@ -1,6 +1,6 @@
 function List() {
   return (
-    <div className="rounded-sm bg-white py-6 px-7.5 shadow-default dark:bg-boxdark">
+    <div className="rounded-sm bg-white py-6 px-3 md:px-7.5 shadow-default dark:bg-boxdark">
       <h1 className="text-title-md font-bold text-black dark:text-white">Customers</h1>
         <div className="max-w-full overflow-x-auto mt-4">
           <table className="w-full table-auto">

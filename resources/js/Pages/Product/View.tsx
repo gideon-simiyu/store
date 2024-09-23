@@ -70,12 +70,17 @@ export default function View({ auth, product, sizes = [], reviews = [] }: any) {
     });
   };
 
+  const onClose = () => {
+    setMessage({...message, show: false});
+  }
+
   return (
     <Authenticated user={auth.user}>
       <Messaging
         mtype={message.type}
         message={message.message}
         show={message.show}
+        onClose={onClose}
       />
       <div className="mx-auto mt-16">
         <section className="relative max-w-6xl mx-auto">

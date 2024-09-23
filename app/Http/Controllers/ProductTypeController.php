@@ -68,8 +68,9 @@ class ProductTypeController extends Controller
         }
         $productTypes = ProductType::all();
 
-        return Inertia::render("Product/Types", [
-            "productTypes" => $productTypes,
+        
+        return Inertia::render("Admin/Type/List", [
+            "product_types" => $productTypes,
         ]);
     }
 }

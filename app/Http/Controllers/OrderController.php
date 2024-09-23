@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Order;
 
 
 class OrderController extends Controller{
@@ -36,6 +37,33 @@ class OrderController extends Controller{
     }
     
     public function checkout(): Response{
-        return Inertia::render('Checkout');
+        $cart = Auth::user()->cart;
+        $products = $cart
+            ? $cart
+                ->products()
+                ->with(["category", "product_type"])
+                ->get()
+            : [];
+        $total = 0;
+        foreach ($products as $product) {
+            $total += $product->price * $product->pivot->quantity;
+        }
+
+        return Inertia::render("Checkout", [
+            "products" => $products,
+            "total" => $total,
+        ]);
+    }
+
+    public function list(Request $request){
+        if ($request->user()->is_staff != 1) {
+            return Redirect::route("home");
+        }
+        $orders = Order::with(["user", "product"])->get();
+        return Inertia::render('Admin/Order/List',
+        [
+            "orders" => $orders
+        ]
+    );
     }
 }

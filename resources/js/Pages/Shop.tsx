@@ -130,7 +130,7 @@ const ShopComponent = ({ auth, products, categories, product_types }: any) => {
           </p>
           <div className="relative w-full max-w-sm">
             <svg
-              className="absolute top-1/2 -translate-y-1/2 left-4 z-50 text-grey-900 dark:text-grey-200"
+              className="absolute top-1/2 -translate-y-1/2 left-4 text-grey-900 dark:text-grey-200"
               width="20"
               height="20"
               viewBox="0 0 20 20"
@@ -247,7 +247,7 @@ const ShopComponent = ({ auth, products, categories, product_types }: any) => {
               <motion.div
                 key={product.id}
                 variants={itemVariants}
-                className="lg:basis-1/4 md:basis-1/2 basis-full px-10 md:p-6 lg:p-4 py-5"
+                className="lg:basis-1/4 md:basis-1/2 basis-full  md:p-6 lg:p-4 py-5"
               >
                 <ProductDisplay auth={auth} product={product} />
               </motion.div>

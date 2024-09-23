@@ -114,6 +114,21 @@ class CartController extends Controller
     }
     
     public function checkout(): Response{
-        return Inertia::render('Checkout');
+        $cart = Auth::user()->cart;
+        $products = $cart
+            ? $cart
+                ->products()
+                ->with(["category", "product_type"])
+                ->get()
+            : [];
+        $total = 0;
+        foreach ($products as $product) {
+            $total += $product->price * $product->pivot->quantity;
+        }
+
+        return Inertia::render("Checkout", [
+            "products" => $products,
+            "total" => $total,
+        ]);
     }
 }

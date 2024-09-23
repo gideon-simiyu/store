@@ -95,12 +95,17 @@ export default function Cart({
     });
   };
 
+  const onClose = () => {
+    setMessaging({...messaging, show: false});
+  }
+
   return (
     <Authenticated user={auth.user}>
       <Messaging
         message={messaging.message}
         mtype={messaging.type}
         show={messaging.show}
+        onClose={onClose}
       />
       <section className="py-24 relative">
         <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">

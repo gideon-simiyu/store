@@ -97,10 +97,10 @@ Route::middleware("auth")->group(function () {
         CategoryController::class,
         "update",
     ])->name("categories.update");
-    Route::delete("/category/delete", [
+    Route::delete("/category/{id}/delete", [
         CategoryController::class,
         "destroy",
-    ])->name("categories.destroy");
+    ])->name("categories.delete");
 });
 
 Route::middleware("auth")->group(function () {
@@ -138,6 +138,11 @@ Route::middleware("auth")->group(function () {
     Route::get("/cart/checkout", [CartController::class, "checkout"])->name(
         "cart.checkout"
     );
+});
+
+
+Route::middleware("auth")->group(function () {
+    Route::get("/orders/all", [OrderController::class, "list"])->name("orders");
 });
 
 require __DIR__ . "/auth.php";

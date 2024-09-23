@@ -1,13 +1,80 @@
+import DangerButton from "@/Components/DangerButton";
+import Messaging from "@/Components/Messaging";
+import Modal from "@/Components/Modal";
+import PrimaryButton from "@/Components/PrimaryButton";
 import AdminLayout, { formatDate } from "@/Layouts/AdminLayout";
-import { Link } from "@inertiajs/react";
+import { Link, router, useForm } from "@inertiajs/react";
+import { FormEventHandler, useState } from "react";
 
 function List({ auth, categories = [] }: any) {
+  const [showModal, setShowModal] = useState(false);
+  const { data, setData, post, reset, errors } = useForm({
+    name: "",
+    description: "",
+  });
+
+  const submit: FormEventHandler = (e) => {
+    e.preventDefault();
+    post(route("categories.create"), {
+      preserveScroll: true,
+      onSuccess: () => {
+        reset();
+        setShowModal(false);
+        setMessaging({
+          type: "success",
+          message: "Category added successfully.",
+          show: true,
+        });
+      },
+    });
+  };
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteCategory, setDeleteCategory] = useState<any>(null);
+
+  const toggleDeleteModal = (category: any) => {
+    setDeleteCategory(category);
+    setShowDeleteModal(true);
+  };
+
+  const [messaging, setMessaging] = useState({
+    type: "",
+    message: "",
+    show: false,
+  });
+
+  const confirmDelete =  (e: any) => {
+    e.preventDefault();
+    router.delete(route("categories.delete", [deleteCategory.id]), {
+      preserveScroll: true,
+      onSuccess: () => {
+        setShowDeleteModal(false);
+        setDeleteCategory(null);
+        setMessaging({
+          type: "success",
+          message: "Category deleted successfully.",
+          show: true,
+        });
+      }
+    });
+  };
+
+  const onClose = () => {
+    setMessaging({...messaging, show: false});
+  }
+
   return (
     <AdminLayout user={auth.user}>
-      <div className="rounded-sm bg-white py-6 px-7.5 shadow-default dark:bg-boxdark">
-        <h1 className="text-title-md font-bold text-black dark:text-white">
-          Categories
-        </h1>
+      <Messaging onClose={onClose} mtype={messaging.type} message={messaging.message} show={messaging.show} />
+      <div className="rounded-sm bg-white py-6 px-3 md:px-7.5 shadow-default dark:bg-boxdark">
+        <div className="flex justify-between items-center">
+          <h1 className="text-title-md font-bold text-black dark:text-white">
+            Categories
+          </h1>
+          <PrimaryButton onClick={() => setShowModal(true)}>
+            Create category
+          </PrimaryButton>
+        </div>
         <div className="max-w-full overflow-x-auto mt-4">
           <table className="w-full table-auto">
             <thead>
@@ -62,17 +129,17 @@ function List({ auth, categories = [] }: any) {
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white flex gap-5">
                       <Link
-                        href={`/admin/categories/${category.id}/edit`}
+                        href={route("categories.view", [category.id])}
                         className="text-blue-600 dark:text-blue-400"
                       >
                         View
                       </Link>
-                      <Link
-                        href={`/admin/categories/${category.id}/edit`}
-                        className="text-red-600 dark:text-red-400"
+                      <span
+                        className="text-red-600 dark:text-red-400 cursor-pointer"
+                        onClick={() => toggleDeleteModal(category)}
                       >
                         Delete
-                      </Link>
+                      </span>
                     </p>
                   </td>
                 </tr>
@@ -81,6 +148,53 @@ function List({ auth, categories = [] }: any) {
           </table>
         </div>
       </div>
+      <Modal onClose={() => setShowModal(false)} show={showModal}>
+        <form onSubmit={submit} className="p-3">
+          <div className="mb-4">
+            <label htmlFor="name" className="form-label">
+              Category Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={data.name}
+              onChange={(e) => setData("name", e.target.value)}
+              className="form-input"
+            />
+            <p className="mt-2 text-red-500">{errors.name}</p>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="name" className="form-label">
+              Category Description
+            </label>
+            <input
+              type="text"
+              name="description"
+              id="description"
+              value={data.description}
+              onChange={(e) => setData("description", e.target.value)}
+              className="form-input"
+            />
+            <p className="mt-2 text-red-500">{errors.description}</p>
+          </div>
+          <div className="flex justify-end">
+            <PrimaryButton>Create Category</PrimaryButton>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal onClose={() => setShowDeleteModal(false)} show={showDeleteModal}>
+        <div className="p-5">
+          <p className="text-white">
+            Are you sure you want to delete category "{deleteCategory?.name}"
+          </p>
+          <div className="flex justify-end gap-4 mt-3">
+            <PrimaryButton onClick={() => setShowDeleteModal(false)}>Cancel</PrimaryButton>
+            <DangerButton onClick={confirmDelete}>Delete</DangerButton>
+          </div>
+        </div>
+      </Modal>
     </AdminLayout>
   );
 }

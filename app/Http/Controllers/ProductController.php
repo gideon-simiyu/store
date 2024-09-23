@@ -88,7 +88,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $productTypes = ProductType::all();
 
-        return Inertia::render("Product/List", [
+        return Inertia::render("Admin/Product/List", [
             "products" => $products,
             "categories" => $categories,
             "productTypes" => $productTypes,
@@ -133,7 +133,7 @@ class ProductController extends Controller
         }
 
         // Return an Inertia response with the filtered products
-        return Inertia::render("Home", [
+        return Inertia::render("Shop", [
             "products" => $products,
             "categories" => Category::all(),
             "product_types" => ProductType::all(),

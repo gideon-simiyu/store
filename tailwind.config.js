@@ -16,6 +16,7 @@ module.exports = {
       fontFamily: {
         satoshi: ["Satoshi", "sans-serif"],
         sans: ["Figtree"],
+        poppins: "Poppins",
       },
       screens: {
         "2xsm": "375px",
@@ -37,6 +38,9 @@ module.exports = {
         stroke: "#E2E8F0",
         grey:{
           ...colors.gray
+        },
+        indigo: {
+          ...colors.emerald
         },
         gray: "#EFF4FB",
         graydark: "#333A48",

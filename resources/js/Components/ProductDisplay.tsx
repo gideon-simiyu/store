@@ -17,10 +17,9 @@ export default function ProductDisplay({
 
     return (
         <motion.div
-            className="relative min-w-full flex w-full max-w-xs flex-col overflow-hidden rounded-lg text-slate-900 dark:text-white bg-white dark:bg-grey-800 shadow-md"
+            className="relative min-w-full flex w-full max-w-xs flex-col overflow-hidden rounded-lg text-slate-900 dark:text-white bg-white dark:bg-grey-800"
             whileHover={{
-                y: -20,
-                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.3)",
+                y: -10,
             }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             whileTap={{ scale: 0.95 }}
@@ -29,7 +28,7 @@ export default function ProductDisplay({
             viewport={{ once: false, amount: 0.1 }} // 'amount' controls when the animation starts (0.3 means 30% of the element is in view)
         >
             <Link
-                href={`/product/${product.id}/view`}
+                href={route("products.view", [product.id])}
                 className="relative mx-3 mt-3 flex h-96 md:h-60 overflow-hidden rounded-xl bg-grey-300"
             >
                 <motion.img
@@ -41,17 +40,9 @@ export default function ProductDisplay({
                     transition={{ duration: 2 }}
                 />
                 {product.discount > 0 && (
-                    <motion.span
-                        className="absolute top-0 left-0 m-2 rounded-full bg-indigo-600 px-2 py-1 text-center text-sm font-medium text-white"
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: 1.5,
-                        }}
-                    >
+                    <span className="absolute top-0 left-0 m-2 rounded-full bg-indigo-600 px-2 py-1 text-center text-sm font-medium text-white">
                         {parseInt(product.discount)}% OFF
-                    </motion.span>
+                    </span>
                 )}
             </Link>
             <div className="mt-4 px-5 pb-5 mb-2 flex flex-col items-center justify-between space-y-2">

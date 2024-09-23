@@ -30,7 +30,7 @@ const AdminLayout: React.FC<{ user: User; children: ReactNode }> = ({
             setSidebarOpen={setSidebarOpen}
           />
           <main>
-            <div className="mx-auto  p-4 md:p-6 2xl:p-10">{children}</div>
+            <div className="mx-auto py-6 md:p-6 2xl:p-10">{children}</div>
           </main>
         </div>
       </div>

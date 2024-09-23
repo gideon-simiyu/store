@@ -1,58 +1,15 @@
+import useColorMode from "@/hooks/useColorMode";
 import React, { useState, useEffect } from "react";
+import DarkModeSwitcher from "./Admin/Header/DarkModeSwitcher";
 
 export default function ThemeSwitcher({ className }: { className?: string }) {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [colorMode, setColorMode] = useColorMode();
 
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("darkMode");
-
-    if (storedTheme) {
-      setDarkMode(JSON.parse(storedTheme));
-      document.body.classList.toggle(
-        "dark",
-        JSON.parse(storedTheme),
-      );
-    } else {
-      const prefersDarkMode = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
-      setDarkMode(prefersDarkMode);
-      document.body.classList.toggle("dark", prefersDarkMode);
-    }
-
-    updateAutofillStyles(darkMode);
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("dark", !darkMode);
-    localStorage.setItem("darkMode", JSON.stringify(!darkMode));
-    updateAutofillStyles(!darkMode);
-  };
-
-  const updateAutofillStyles = (isDarkMode: boolean) => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover,
-      input:-webkit-autofill:focus,
-      textarea:-webkit-autofill,
-      textarea:-webkit-autofill:hover,
-      textarea:-webkit-autofill:focus,
-      select:-webkit-autofill,
-      select:-webkit-autofill:hover,
-      select:-webkit-autofill:focus {
-          border: 1px solid #253341;
-          -webkit-text-fill-color: ${isDarkMode ? "white" : "black"};
-          -webkit-box-shadow: 0 0 0px 1000px #253341 inset;
-          box-shadow: 0 0 0px 1000px transparent inset;
-          transition: background-color 5000s ease-in-out 0s;
-          color: ${isDarkMode ? "white" : "black"};
-      }
-    `;
-    document.head.appendChild(style);
-  };
-
+  return (
+    <div className={`relative cursor-pointer ${className}`}>
+      <DarkModeSwitcher />
+    </div>
+  );
   return (
     <label
       className={`inline-flex items-center relative cursor-pointer ${className}`}
@@ -61,8 +18,12 @@ export default function ThemeSwitcher({ className }: { className?: string }) {
         className="peer hidden"
         id="toggle"
         type="checkbox"
-        checked={darkMode}
-        onChange={toggleDarkMode}
+        checked={colorMode === "dark"}
+        onChange={() => {
+          if (typeof setColorMode === "function") {
+            setColorMode(colorMode === "light" ? "dark" : "light");
+          }
+        }}
       />
       <div className="relative w-[60px] h-[30px] bg-gray-400 dark:bg-zinc-900 peer-checked:bg-zinc-500 rounded-full after:absolute after:content-[''] after:w-[24px] after:h-[24px] after:bg-gradient-to-r from-orange-500 to-yellow-400 peer-checked:after:from-zinc-900 peer-checked:after:to-zinc-900 after:rounded-full after:top-[3px] after:left-[3px] active:after:w-[28px] peer-checked:after:left-[57px] peer-checked:after:translate-x-[-100%] shadow-sm duration-300 after:duration-300 after:shadow-md"></div>
       <svg
